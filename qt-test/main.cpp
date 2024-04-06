@@ -85,30 +85,8 @@ public slots:
     }
 
     void readData() {
-      //  static QByteArray buffer; // Static buffer to accumulate incomplete lines
-
-        while (serial->bytesAvailable() > 0) {
-            QByteArray newData = serial->readAll();
-            buffer.append(newData);
-
-            // Process complete lines
-            while (buffer.contains('\n')) {
-                int newlineIndex = buffer.indexOf('\n');
-                QByteArray line = buffer.left(newlineIndex + 1); // Include the newline character
-                buffer.remove(0, newlineIndex + 1); // Remove the processed line from the buffer
-
-                // Handle the complete line (e.g., print it)
-                qDebug() << "Received line:" << line;
-                  textEdit->append("UART:" + line);
-                // You can emit a signal with the line if needed
-                // emit lineReceived(line);
-            }
-        }
-
-       // QStringList lines = QString(data).split('\n', QString::SkipEmptyParts);
-
-
-        //reads buffer until new line /n ? then triggers the output and clear
+        QByteArray data = serial->readAll();
+        textEdit->append("UART:" + data);
     }
 
     void sendData() {
@@ -138,7 +116,6 @@ private:
     QLineEdit *inputLineEdit;
     QPushButton *sendButton;
     QLabel *connectionStatusLabel;
-     QByteArray buffer;
 };
 
 int main(int argc, char *argv[]) {
